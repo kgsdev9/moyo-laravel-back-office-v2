@@ -4,60 +4,57 @@ namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Services\TransactionService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    protected $transactionService;
 
-
-
+    public function __construct(TransactionService $transactionService)
+    {
+        $this->transactionService = $transactionService;
+    }
 
     public function getByPhone(Request $request)
     {
         $phone = $request->query('phone');
-
-        $user  = User::where('phone', $phone)->first();
-
-        if (!$phone) {
-            return response()->json([
-                'error' => 'Le numéro de téléphone est requis.'
-            ], 400);
-        }
-
-        $transactions = Transaction::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->json($transactions);
+        return $this->transactionService->getByPhone($phone);
     }
 
-
-    public function post(Request $request)
+    public function store(Request $request)
     {
-        $phone = $request->query('phone');
+        try {
+            $transaction = $this->transactionService->createTransaction($request->all());
 
-        $user  = User::where('phone', $phone)->first();
-
-        if (!$phone) {
             return response()->json([
-                'error' => 'Le numéro de téléphone est requis.'
-            ], 400);
+                'success' => true,
+                'message' => 'Transaction enregistrée avec succès.',
+                'data' => $transaction,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Transaction échouée : ' . $e->getMessage(),
+            ], 500);
         }
-
-        $transactions = Transaction::where('id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->json($transactions);
     }
 
-
-
-
+    public function show(int $id)
+    {
+        try {
+            $transaction = $this->transactionService->getTransactionById($id);
+            return response()->json([
+                'success' => true,
+                'data' => $transaction,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur serveur : ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

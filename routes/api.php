@@ -29,8 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Déconnexion réussie']);
     });
-
+    Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/transactions', [TransactionController::class, 'getByPhone']);
+    Route::get('/transactions/{id}', [TransactionController::class, 'show']);
     Route::get('/solde', [SoldeController::class, 'getSolde']);
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);

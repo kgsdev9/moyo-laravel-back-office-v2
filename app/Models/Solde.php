@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Solde extends Model
 {
     use HasFactory;
-    
+
      protected $fillable = ['user_id', 'solde'];
+
+     public $timestamps = false;
 }
