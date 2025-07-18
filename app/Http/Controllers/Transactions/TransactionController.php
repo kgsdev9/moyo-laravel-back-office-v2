@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Services\TransactionService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class TransactionController extends Controller
 {
     protected $transactionService;
@@ -20,6 +21,11 @@ class TransactionController extends Controller
     {
         $phone = $request->query('phone');
         return $this->transactionService->getByPhone($phone);
+    }
+
+    public function getTransactionByUser($id)
+    {
+        return $this->transactionService->getTransactionByUser($id);
     }
 
     public function store(Request $request)

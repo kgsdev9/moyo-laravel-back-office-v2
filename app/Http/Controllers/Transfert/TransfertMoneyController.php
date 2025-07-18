@@ -1,34 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Solde;
+namespace App\Http\Controllers\Transfert;
 
 use App\Http\Controllers\Controller;
-use App\Models\Solde;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class SoldeController extends Controller
+class TransfertMoneyController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function getSolde(Request $request)
+    public function index()
     {
-        $id = $request->query('id');
-
-        $user = User::where('id', $id)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-        }
-
-        $solde = Solde::where('user_id', $user->id)->first();
-
-        return response()->json([
-            'solde' => $solde ? $solde->solde : 0
-        ]);
+        //
     }
 
     /**

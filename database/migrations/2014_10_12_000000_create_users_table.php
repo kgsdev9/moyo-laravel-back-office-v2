@@ -15,17 +15,16 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('codemembre')->unique();
-            $table->string('phone')->unique();
-            $table->string('qrcode')->unique();
-            $table->string('email')->nullable();
-            $table->string('nom')->nullable();
-            $table->string('prenom')->nullable();
-            $table->string('piece_avant')->nullable();
-            $table->string('piece_arriere')->nullable();
-            $table->string('pin'); 
-            $table->boolean('active')->default(false); 
+            $table->string('name')->nullable();
+            $table->string('telephone')->unique();
+            $table->string('email')->unique()->nullable();
+            $table->string('password')->nullable();
+            $table->string('codeSecret')->nullable();
+            $table->string('publicKey')->nullable();
+            $table->string('qrcode')->nullable();
+            $table->date('confirmated_at')->nullable();
+            $table->enum('role', ['client', 'entreprise', 'ecole', 'admin'])->default('client');
+            $table->boolean('statusCompte')->default(false);
             $table->timestamps();
         });
     }

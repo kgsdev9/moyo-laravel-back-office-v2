@@ -6,7 +6,8 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Modereglement\ModereglementController;
 use App\Http\Controllers\Solde\SoldeController;
 use App\Http\Controllers\Transactions\TransactionController;
-
+use App\Http\Controllers\API\CategorySchoolController;
+use App\Http\Controllers\API\EcoleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,7 +22,10 @@ use App\Http\Controllers\Transactions\TransactionController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login-pin', [AuthController::class, 'loginWithPin']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/send-code', [AuthController::class, 'sendCode']);
+Route::post('/verify-code', [AuthController::class, 'verifyCode']);
+Route::middleware('auth:sanctum')->post('/maj/profile', [AuthController::class, 'setSecret']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
@@ -31,8 +35,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/transactions', [TransactionController::class, 'getByPhone']);
+    Route::get('/user/transactions/{id}', [TransactionController::class, 'getTransactionByUser']);
     Route::get('/transactions/{id}', [TransactionController::class, 'show']);
     Route::get('/solde', [SoldeController::class, 'getSolde']);
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);
 });
+
+
+
+Route::get('/categories', [CategorySchoolController::class, 'index']);
+Route::get('/ecoles', [EcoleController::class, 'index']);

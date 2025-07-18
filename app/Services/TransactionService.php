@@ -34,16 +34,33 @@ class TransactionService
         return response()->json($transactions);
     }
 
+    public function getTransactionByUser(string $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Utilisateur introuvable.'
+            ], 404);
+        }
+
+        $transactions = Transaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($transactions);
+    }
+
     public function createTransaction(array $data)
     {
-        $user = User::where('phone', $data['phone'])->firstOrFail();
+        $user = User::where('telephone', $data['phone'])->firstOrFail();
         $typeoperation = 'depot'; // ou 'retrait' selon ton usage
 
         return DB::transaction(function () use ($data, $user, $typeoperation) {
             // 1. Création de la transaction
             $transaction = Transaction::create([
                 'user_id'          => $user->id,
-                'name'             => $user->name,
+                'name'             => $user->name ?? rand(100, 9988),
                 'reference'        => uniqid('REF-'),
                 'montant'          => $data['amount'],
                 'typeoperation'    => $typeoperation,
@@ -75,7 +92,6 @@ class TransactionService
             return $transaction;
         });
     }
-
 
     public function getTransactionById(int $id): Transaction
     {
