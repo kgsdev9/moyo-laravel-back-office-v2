@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Pays extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'active',
+        'paymentdirect',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'paymentdirect' => 'boolean',
+    ];
 }

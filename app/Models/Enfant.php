@@ -8,4 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 class Enfant extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nom',
+        'prenom',
+        'matricule',
+        'email',
+        'ecole_id',
+        'ville_id',
+        'pays_id',
+    ];
+
+    public function ecole()
+    {
+        return $this->belongsTo(Ecole::class);
+    }
+
+    public function ville()
+    {
+        return $this->belongsTo(Ville::class);
+    }
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class);
+    }
 }

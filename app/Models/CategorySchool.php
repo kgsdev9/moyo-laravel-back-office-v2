@@ -11,6 +11,7 @@ class CategorySchool extends Model
 
        protected $fillable = [
         'name',
+        'active'
 
     ];
 

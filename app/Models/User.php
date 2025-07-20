@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable
@@ -14,35 +13,39 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'email',
+        'name',
         'telephone',
+        'email',
+        'avatar',
         'password',
         'codeSecret',
         'publicKey',
+        'qrcode',
+        'confirmated_at',
         'role',
         'statusCompte',
+    ];
+
+    protected $casts = [
+        'confirmated_at' => 'date',
+        'statusCompte' => 'boolean',
     ];
 
     protected $hidden = [
         'password',
         'codeSecret',
-        'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // Relations
+    public function profil()
+    {
+        return $this->hasOne(Profil::class);
+    }
 
-    // // Relations
-    // public function client()
-    // {
-    //     return $this->hasOne(Client::class);
-    // }
-
-    // public function entreprise()
-    // {
-    //     return $this->hasOne(Entreprise::class);
-    // }
+    public function entreprise()
+    {
+        return $this->hasOne(Entreprise::class);
+    }
 
     public function ecole()
     {
@@ -54,7 +57,7 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
-  
+
     public static function generateQrCode(): string
     {
         return Str::uuid();
