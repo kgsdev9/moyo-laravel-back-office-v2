@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendVerificationCodeMail;
+
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -44,6 +45,7 @@ class AuthController extends Controller
         $user = User::where('telephone', $phone)->first();
 
         if ($user) {
+           
             return response()->json([
                 'user' => [
                     'id' => $user->id,
@@ -71,7 +73,6 @@ class AuthController extends Controller
             // 'code' => $code, <-- ne jamais renvoyer ça en prod
         ], 200);
     }
-
 
     public function verifyCode(Request $request)
     {
@@ -112,11 +113,9 @@ class AuthController extends Controller
             ]);
         }
 
-        // Authentifier et générer un token Sanctum
-        $token = $user->createToken('mobile_token')->plainTextToken;
-
+        // Ici, **ne pas générer ni renvoyer de token**
         return response()->json([
-            'token' => $token,
+            // 'token' => $token, // supprimé
             'user' => $user,
         ]);
     }
@@ -152,9 +151,13 @@ class AuthController extends Controller
                 'password' => $hashedCode,
             ]);
 
+            // Générer le token Sanctum après mise à jour du secret
+            $token = $user->createToken('mobile_token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Profil enregistré avec succès.',
                 'user' => $user,
+                'token' => $token,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -163,6 +166,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
 
 
     public function me(Request $request)

@@ -18,12 +18,13 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->string('telephone')->unique();
             $table->string('email')->unique()->nullable();
+            $table->string('avatar')->nullable();
             $table->string('password')->nullable();
             $table->string('codeSecret')->nullable();
             $table->string('publicKey')->nullable();
-            $table->string('qrcode')->nullable();
+            $table->string('qrcode')->unique();
             $table->date('confirmated_at')->nullable();
-            $table->enum('role', ['client', 'entreprise', 'ecole', 'admin'])->default('client');
+            $table->enum('role', ['client', 'entreprise', 'ecole', 'admin', 'user', 'developpeur', 'adminsys', 'comptable', 'commercial', 'rh', 'invest', 'controlegestion','directeur', 'assistant'])->default('client');
             $table->boolean('statusCompte')->default(false);
             $table->timestamps();
         });

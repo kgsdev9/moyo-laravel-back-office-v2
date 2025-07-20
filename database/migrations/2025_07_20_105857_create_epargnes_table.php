@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModeReglementsTable extends Migration
+class CreateEpargnesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateModeReglementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mode_reglements', function (Blueprint $table) {
+        Schema::create('epargnes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image')->nullable();
-            $table->decimal('taux_frais', 5, 2)->default(1.00);
-            $table->boolean('active')->default(false);
-            $table->enum('typemoderegleemnt', ['local', 'international'])->default('local');
+            $table->unsignedBigInteger('user_id');
+            $table->decimal('solde', 15, 2)->default(0);
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->date('datebutoire');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateModeReglementsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mode_reglements');
+        Schema::dropIfExists('epargnes');
     }
 }

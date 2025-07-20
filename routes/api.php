@@ -8,6 +8,9 @@ use App\Http\Controllers\Solde\SoldeController;
 use App\Http\Controllers\Transactions\TransactionController;
 use App\Http\Controllers\API\CategorySchoolController;
 use App\Http\Controllers\API\EcoleController;
+use App\Http\Controllers\Scolarite\ScolariteController;
+use App\Http\Controllers\StripeController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,7 +28,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/send-code', [AuthController::class, 'sendCode']);
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
-Route::middleware('auth:sanctum')->post('/maj/profile', [AuthController::class, 'setSecret']);
+Route::post('/maj/profile', [AuthController::class, 'setSecret']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
@@ -46,3 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
+
+
+Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
+Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);

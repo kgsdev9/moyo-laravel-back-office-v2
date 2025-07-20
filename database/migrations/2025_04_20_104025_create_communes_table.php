@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategorySchoolsTable extends Migration
+class CreateCommunesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateCategorySchoolsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_schools', function (Blueprint $table) {
+        Schema::create('communes', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Ex: Collège, Lycée, etc.
+            $table->string('name');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateCategorySchoolsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_schools');
+        Schema::dropIfExists('communes');
     }
 }
