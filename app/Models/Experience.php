@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Commune extends Model
+class Experience extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
-        'name',
-        'active'
+        'user_id',
+        'libelleexperience',
+        'entreprise',
+        'date_debut',
+        'date_fin',
+        'description',
     ];
 }

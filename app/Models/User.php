@@ -21,22 +21,28 @@ class User extends Authenticatable
         'codeSecret',
         'publicKey',
         'qrcode',
+        'cvv',
+        'numerocarte',
+        'dateexpiration',
         'confirmated_at',
         'role',
         'statusCompte',
     ];
 
-    protected $casts = [
-        'confirmated_at' => 'date',
-        'statusCompte' => 'boolean',
-    ];
-
     protected $hidden = [
         'password',
+        'remember_token',
+        'cvv',
+        'numerocarte',
         'codeSecret',
+        'publicKey',
     ];
 
-    // Relations
+    protected $casts = [
+        'statusCompte' => 'boolean',
+        'confirmated_at' => 'datetime',
+        'dateexpiration' => 'date',
+    ];
     public function profil()
     {
         return $this->hasOne(Profil::class);

@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profil extends Model
+class UserDevice extends Model
 {
     use HasFactory;
 
-      public $timestamps = false;
-
     protected $fillable = [
-        'nomcomplet',
-        'adresse',
-        'piece_recto',
-        'piece_verso',
-        'status',
         'user_id',
-        'profession',
+        'nom_appareil',
+        'plateforme',
+        'navigateur',
+        'adresse_ip',
+        'agent_utilisateur',
+        'actif',
     ];
 }

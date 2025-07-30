@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Auth\UpdateProfilCompteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
@@ -43,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/solde', [SoldeController::class, 'getSolde']);
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);
+    Route::post('/update-or-create-profil', [UpdateProfilCompteController::class, 'updateOrCreateProfil']);
 });
 
 

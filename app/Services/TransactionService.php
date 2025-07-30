@@ -54,13 +54,12 @@ class TransactionService
     public function createTransaction(array $data)
     {
         $user = User::where('telephone', $data['phone'])->firstOrFail();
-        $typeoperation = 'depot'; // ou 'retrait' selon ton usage
-
+        $typeoperation = 'depot';
         return DB::transaction(function () use ($data, $user, $typeoperation) {
             // 1. Création de la transaction
             $transaction = Transaction::create([
                 'user_id'          => $user->id,
-                'name'             => $user->name ?? rand(100, 9988),
+                'name'             => "Recharge Compte",
                 'reference'        => uniqid('REF-'),
                 'montant'          => $data['amount'],
                 'typeoperation'    => $typeoperation,

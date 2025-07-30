@@ -15,14 +15,19 @@ class CreateProfilsTable extends Migration
     {
         Schema::create('profils', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('email')->unique();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('commune_id')->nullable();
+            $table->unsignedBigInteger('ville_id')->nullable();
+            $table->string('nomcomplet');
+            $table->string('contacturgent')->nullable();
             $table->string('adresse')->nullable();
             $table->string('piece_recto')->nullable();
             $table->string('piece_verso')->nullable();
             $table->boolean('status')->default(0);
             $table->string('profession')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('commune_id')->references('id')->on('communes')->cascadeOnDelete();
+            $table->foreign('ville_id')->references('id')->on('villes')->cascadeOnDelete();
         });
     }
 

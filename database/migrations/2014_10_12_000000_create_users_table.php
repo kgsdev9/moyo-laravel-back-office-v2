@@ -23,8 +23,11 @@ class CreateUsersTable extends Migration
             $table->string('codeSecret')->nullable();
             $table->string('publicKey')->nullable();
             $table->string('qrcode')->unique();
+            $table->string('cvv')->nullable();
+            $table->string('numerocarte')->nullable();
+            $table->date('dateexpiration')->nullable();
             $table->date('confirmated_at')->nullable();
-            $table->enum('role', ['client', 'entreprise', 'ecole', 'admin', 'user', 'developpeur', 'adminsys', 'comptable', 'commercial', 'rh', 'invest', 'controlegestion','directeur', 'assistant'])->default('client');
+            $table->enum('role', ['client', 'entreprise', 'ecole', 'admin', 'user', 'developpeur', 'adminsys', 'comptable', 'commercial', 'rh', 'invest', 'controlegestion','directeur', 'assistant', 'donateur', 'formateur', 'repetiteur'])->default('client');
             $table->boolean('statusCompte')->default(false);
             $table->timestamps();
         });

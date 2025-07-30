@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profil extends Model
+class CagnoteScolaire extends Model
 {
     use HasFactory;
 
-      public $timestamps = false;
-
     protected $fillable = [
-        'nomcomplet',
-        'adresse',
-        'piece_recto',
-        'piece_verso',
+        'code',
+        'nom',
+        'description',
+        'montant_objectif',
+        'montant_collecte',
+        'date_limite',
         'status',
-        'user_id',
-        'profession',
     ];
 }

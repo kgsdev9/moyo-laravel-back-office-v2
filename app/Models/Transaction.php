@@ -14,6 +14,7 @@ class Transaction extends Model
         'modereglementname',
         'reference',
         'montant',
+        'solderestant',
         'fraisoperateur',
         'fraisservice',
         'modereglement_id',
@@ -22,17 +23,39 @@ class Transaction extends Model
         'typeoperation',
         'status',
         'observation',
+        'description',
         'user_id',
+        'sender_id',
+        'recepteur_id',
     ];
 
+    public function modeReglement()
+    {
+        return $this->belongsTo(ModeReglement::class, 'modereglement_id');
+    }
+
+    public function ecole()
+    {
+        return $this->belongsTo(Ecole::class, 'ecole_id');
+    }
+
+    public function entreprise()
+    {
+        return $this->belongsTo(Entreprise::class, 'entreprise_id');
+    }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function modereglement()
+    public function sender()
     {
-        return $this->belongsTo(ModeReglement::class);
+        return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function recepteur()
+    {
+        return $this->belongsTo(User::class, 'recepteur_id');
     }
 }

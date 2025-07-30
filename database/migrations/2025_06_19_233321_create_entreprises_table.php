@@ -15,23 +15,18 @@ class CreateEntreprisesTable extends Migration
     {
         Schema::create('entreprises', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
-
             $table->string('nom');
             $table->string('url_logo')->nullable();
             $table->string('email');
             $table->string('adresse')->nullable();
             $table->string('contactrh');
             $table->string('siteweb')->nullable();
-
             $table->unsignedBigInteger('ville_id')->nullable();
             $table->unsignedBigInteger('pays_id')->nullable();
-
             $table->foreign('ville_id')->references('id')->on('villes')->cascadeOnDelete();
             $table->foreign('pays_id')->references('id')->on('pays')->cascadeOnDelete();
-
             $table->timestamps();
         });
     }

@@ -15,17 +15,14 @@ class CreateTMouchardsTable extends Migration
     {
         Schema::create('t_mouchards', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('nom_appareil')->nullable();
-            $table->string('identifiant_appareil')->nullable();
-            $table->string('adresse_ip')->nullable();
-            $table->string('plateforme')->nullable();
-            $table->string('version_app')->nullable();
-            $table->string('type_evenement')->nullable();
-            $table->text('agent_utilisateur')->nullable();
-            $table->text('valeur_ancienne')->nullable();
-            $table->text('valeur_nouvelle')->nullable();
-            $table->string('action')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('action');
+            $table->text('description')->nullable();
+            $table->string('module')->nullable();     // Ex : "Cagnottes", "Utilisateurs"
+            $table->text('val_ancienne')->nullable(); // Ancienne valeur (avant modification)
+            $table->text('val_nouvelle')->nullable(); // Nouvelle valeur (après modification)
+            $table->string('ip')->nullable();         // IP de l'utilisateur
+            $table->text('navigateur')->nullable();   // User-Agent ou device
             $table->timestamps();
         });
     }

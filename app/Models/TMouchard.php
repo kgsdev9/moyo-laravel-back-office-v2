@@ -10,16 +10,18 @@ class TMouchard extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',             // Identifiant de l'utilisateur
-        'nom_appareil',        // Nom de l'appareil
-        'identifiant_appareil', // ID unique de l'appareil (UUID, IMEI, etc.)
-        'adresse_ip',          // Adresse IP
-        'plateforme',          // Plateforme utilisée (Android, iOS, etc.)
-        'version_app',         // Version de l'application
-        'type_evenement',      // Type d'événement (connexion, modification, suppression…)
-        'agent_utilisateur',   // User-Agent (navigateur ou app mobile)
-        'valeur_ancienne',     // Ancienne valeur
-        'valeur_nouvelle',     // Nouvelle valeur
-        'action',              // Action effectuée (ex. : Connexion, Modification profil, etc.)
+        'user_id',
+        'action',
+        'description',
+        'module',
+        'val_ancienne',
+        'val_nouvelle',
+        'ip',
+        'navigateur',  
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
