@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user = User::where('telephone', $phone)->first();
 
         if ($user) {
-           
+
             return response()->json([
                 'user' => [
                     'id' => $user->id,
@@ -65,12 +65,12 @@ class AuthController extends Controller
             'expires_at' => $expiresAt,
         ], now()->addMinutes(5));
 
-        $email = $request->email ?? 'kgsdev8@gmail.com';
+        $email ='kgsdev8@gmail.com';
         Mail::to($email)->send(new SendVerificationCodeMail($code));
-
+        
         return response()->json([
             'message' => 'Code envoyé par e-mail',
-            // 'code' => $code, <-- ne jamais renvoyer ça en prod
+            'code' => $code
         ], 200);
     }
 

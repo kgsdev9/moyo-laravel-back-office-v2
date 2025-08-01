@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cagnote;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cagnote;
 use App\Models\CagnoteSouscriveur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,7 +16,7 @@ class CagnoteController extends Controller
      */
     public function index()
     {
-        $cagnotes = CagnoteSouscriveur::with('user')->get();
+        $cagnotes = Cagnote::with('user')->get();
         return response()->json([
             'cagnotes' => $cagnotes,
         ], 201);

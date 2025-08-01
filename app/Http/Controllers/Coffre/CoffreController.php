@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Coffre;
 
 use App\Http\Controllers\Controller;
 use App\Models\Coffre;
+use App\Models\Solde;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
+use App\Models\User;
 
 class CoffreController extends Controller
 {
@@ -32,34 +35,67 @@ class CoffreController extends Controller
     /**
      * Créditer ou débiter le solde du coffre
      */
+
+
     public function creditOrDebit(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:coffres,user_id',
-            'type' => 'required|in:credit,debit',
-            'montant' => 'required|numeric|min:0.01',
-        ]);
+        $userId = $request->user_id;
+        $montant = $request->montant;
+        $type = $request->type;
 
-        $coffre = Coffre::where('user_id', $request->user_id)->first();
+        $user = User::find($userId);
+        $coffre = Coffre::where('user_id', $userId)->first();
+        $solde = Solde::where('user_id', $userId)->first();
 
-        if (!$coffre) {
-            return response()->json(['message' => 'Coffre non trouvé'], 404);
+        if (!$user || !$coffre || !$solde) {
+            return response()->json(['message' => 'Coffre, Solde ou Utilisateur introuvable'], 404);
         }
 
-        if ($request->type === 'debit') {
-            if ($coffre->solde < $request->montant) {
-                return response()->json(['message' => 'Fonds insuffisants'], 400);
+        if ($type == 'debit') {
+            // Transfert du coffre vers le solde
+            if ($coffre->solde < $montant) {
+                return response()->json(['message' => 'Fonds insuffisants dans le coffre'], 400);
             }
-            $coffre->solde -= $request->montant;
-        } else {
-            $coffre->solde += $request->montant;
+
+            $coffre->solde -= $montant;
+            $solde->solde += $montant;
+
+            // 💾 Enregistrement de la transaction
+            Transaction::create([
+                'user_id'        => $userId,
+                'name'           => "Transfert de {$montant} FCFA du coffre vers le solde",
+                'reference'      => uniqid('REF-'),
+                'montant'        => -$montant,
+                'typeoperation'  => 'transfert',
+                'status'           => 'succes',
+            ]);
+        } elseif ($type == 'credit') {
+            // Transfert du solde vers le coffre
+            if ($solde->solde < $montant) {
+                return response()->json(['message' => 'Fonds insuffisants sur le compte'], 400);
+            }
+
+            $solde->solde -= $montant;
+            $coffre->solde += $montant;
+
+            // 💾 Enregistrement de la transaction
+            Transaction::create([
+                'user_id'        => $userId,
+                'name'           => "Recharge du coffre depuis le solde principal ({$montant} FCFA)",
+                'reference'      => uniqid('REF-'),
+                'montant'        => +$montant,
+                'typeoperation'  => 'transfert',
+                'status'           => 'succes',
+            ]);
         }
 
         $coffre->save();
+        $solde->save();
 
         return response()->json([
-            'message' => 'Opération réussie',
-            'solde' => $coffre->solde,
+            'message'          => 'Opération réussie',
+            'coffre_solde'     => $coffre->solde,
+            'solde_principal'  => $solde->solde,
         ]);
     }
 }

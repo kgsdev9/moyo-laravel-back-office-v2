@@ -28,6 +28,7 @@ class TransactionService
         }
 
         $transactions = Transaction::where('user_id', $user->id)
+            ->where('typeoperation', '!=', 'transfert')
             ->orderBy('created_at', 'desc')
             ->get();
 
