@@ -18,6 +18,6 @@ class Librairie extends Model
         'commune_id',
         'pays_id',
         'active',
-        'nrcccm'
+        'nrcccm',
     ];
 }

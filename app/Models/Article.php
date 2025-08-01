@@ -16,6 +16,6 @@ class Article extends Model
         'description',
         'pu',
         'librairy_id',
-        'active'
+        'disponibilite'
     ];
 }

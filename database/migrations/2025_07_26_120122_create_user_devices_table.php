@@ -14,7 +14,7 @@ class CreateUserDevicesTable extends Migration
     public function up()
     {
         Schema::create('user_devices', function (Blueprint $table) {
-            $table->foreignId('userutilisateur_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nom_appareil')->nullable();
             $table->string('plateforme')->nullable();          // Ex : Android, Windows
             $table->string('navigateur')->nullable();          // Ex : Chrome, Safari

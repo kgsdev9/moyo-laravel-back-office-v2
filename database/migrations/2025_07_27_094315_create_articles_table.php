@@ -15,20 +15,19 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->string('nom');
+            $table->string('libelle');
             $table->text('description')->nullable();
-            $table->decimal('prix', 12, 2);
+            $table->decimal('pu', 12, 2);
             $table->boolean('disponibilite')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+
+    
+
     public function down()
     {
         Schema::dropIfExists('articles');

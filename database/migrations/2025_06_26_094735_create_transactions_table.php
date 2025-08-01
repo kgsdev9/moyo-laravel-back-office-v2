@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->string('name');
             $table->string('modereglementname')->nullable();
             $table->string('reference')->unique();
+            $table->string('telephone')->default('+225');
             $table->decimal('montant', 12, 2)->default(0);
             $table->string('solderestant')->nullable();
             $table->decimal('fraisoperateur', 12, 2)->default(0);
