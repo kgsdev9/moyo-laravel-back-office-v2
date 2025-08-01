@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Experience extends Model
+class Specialite extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'libelleexperience',
-        'entreprise',
-        'date_debut',
-        'date_fin',
-        'description',
+        'name',
     ];
 }

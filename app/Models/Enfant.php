@@ -14,6 +14,7 @@ class Enfant extends Model
         'prenom',
         'matricule',
         'email',
+        'user_id',
         'ecole_id',
         'ville_id',
         'pays_id',

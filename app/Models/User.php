@@ -13,8 +13,11 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
+        
         'name',
         'telephone',
+        'contact_urgent',
+        'fixe',
         'email',
         'avatar',
         'password',
@@ -25,9 +28,37 @@ class User extends Authenticatable
         'numerocarte',
         'dateexpiration',
         'confirmated_at',
+        'couleur_carte',
         'role',
         'statusCompte',
+        'adresse',
+        'piece_recto',
+        'piece_verso',
+        'status',
+        'nomcomplet',
+        'prenom',
+        'ville_id',
+        'commune_id',
+        'specialite_id',
+        'pays_id',
+        'date_livraison',
+        'payment'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function ville()
+    {
+        return $this->belongsTo(Ville::class);
+    }
+
+    public function pays()
+    {
+        return $this->belongsTo(Pays::class);
+    }
 
     protected $hidden = [
         'password',
@@ -43,15 +74,6 @@ class User extends Authenticatable
         'confirmated_at' => 'datetime',
         'dateexpiration' => 'date',
     ];
-    public function profil()
-    {
-        return $this->hasOne(Profil::class);
-    }
-
-    public function entreprise()
-    {
-        return $this->hasOne(Entreprise::class);
-    }
 
     public function ecole()
     {
