@@ -9,6 +9,8 @@ use App\Http\Controllers\Solde\SoldeController;
 use App\Http\Controllers\Transactions\TransactionController;
 use App\Http\Controllers\API\CategorySchoolController;
 use App\Http\Controllers\API\EcoleController;
+use App\Http\Controllers\Cagnote\CagnoteController;
+use App\Http\Controllers\Coffre\CoffreController;
 use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\StripeController;
 
@@ -45,13 +47,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);
     Route::post('/update-or-create-profil', [UpdateProfilCompteController::class, 'updateOrCreateProfil']);
-});
+    // fonctionnalites coffres
+    Route::get('/coffre/solde/{user_id}', [CoffreController::class, 'getSoldeByUserId']);
+    Route::post('/coffre/transaction', [CoffreController::class, 'creditOrDebit']);
+    Route::resource('cagnotes', CagnoteController::class);
+    Route::get('/coffres/{user_id}/solde', [CoffreController::class, 'getSoldeByUserId']);
 
+});
 
 
 Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
 
-
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
 Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+
+
+
