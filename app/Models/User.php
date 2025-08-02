@@ -53,6 +53,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Ville::class);
     }
+      public function specialite()
+    {
+        return $this->belongsTo(Specialite::class);
+    }
 
     public function pays()
     {

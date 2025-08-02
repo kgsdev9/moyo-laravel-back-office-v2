@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Cagnote;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cagnote;
-use App\Models\CagnoteSouscriveur;
 use App\Models\Solde;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -88,19 +87,12 @@ class CagnoteController extends Controller
 
     public function participer(Request $request)
     {
-        // $request->validate([
-        //     'cagnotte_id' => 'required|exists:cagnotes,id',
-        //     'montant'     => 'required|numeric|min:1',
-        //     'user_id'     => 'required|exists:users,id',
-        // ]);
-
         $cagnotte = Cagnote::findOrFail($request->cagnotte_id);
         $solde = Solde::where('user_id', $request->user_id)->first();
 
         if (!$solde || $solde->solde < $request->montant) {
             return response()->json(['message' => 'Solde insuffisant.'], 400);
         }
-
         // Début transaction DB pour sécurité
         DB::beginTransaction();
 
@@ -113,11 +105,6 @@ class CagnoteController extends Controller
             $cagnotte->montant_collecte += $request->montant;
             $cagnotte->save();
 
-            // // Calculer pourcentage (optionnel, selon ta logique)
-            // $pourcentage = ($cagnotte->montant_collecte / $cagnotte->montant_objectif) * 100;
-            // $cagnotte->pourcentage = round($pourcentage, 2);
-            // $cagnotte->save();
-            // Enregistrer la transaction
             Transaction::create([
                 'user_id'       => $request->user_id,
                 'name'          => "Participation à la cagnotte ({$request->montant} FCFA)",

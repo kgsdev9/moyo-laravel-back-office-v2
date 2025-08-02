@@ -36,7 +36,6 @@ class CoffreController extends Controller
      * Créditer ou débiter le solde du coffre
      */
 
-
     public function creditOrDebit(Request $request)
     {
         $userId = $request->user_id;

@@ -13,6 +13,8 @@ use App\Http\Controllers\Cagnote\CagnoteController;
 use App\Http\Controllers\Coffre\CoffreController;
 use App\Http\Controllers\Commune\CommuneController;
 use App\Http\Controllers\Scolarite\ScolariteController;
+use App\Http\Controllers\Service\ServiceController;
+use App\Http\Controllers\Specialite\SpecialiteController;
 use App\Http\Controllers\StripeController;
 
 /*
@@ -53,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
     Route::apiResource('communes', CommuneController::class);
+    Route::apiResource('services', ServiceController::class);
+    Route::apiResource('specialites', SpecialiteController::class);
     Route::get('/coffres/{user_id}/solde', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/operation', [CoffreController::class, 'creditOrDebit']);
 });
@@ -60,6 +64,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
-
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
 Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);

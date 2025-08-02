@@ -1,31 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Service;
+namespace App\Http\Controllers\Specialite;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Specialite;
 use Illuminate\Http\Request;
 
-class ServiceController extends Controller
+class SpecialiteController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+   public function index()
     {
-        $query = User::with('specialite')
-            ->whereIn('role', ['formateur', 'repetiteur', 'encadreur'])
-            ->where('statusCompte', true);
-
-        if ($request->has('specialite_id')) {
-            $query->where('specialite_id', $request->specialite_id);
-        }
-
-        $users = $query->paginate(40);
-
-        return response()->json($users);
+        return response()->json(Specialite::all());
     }
 
     /**
@@ -55,13 +45,9 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show($id)
     {
-        $user = User::with('specialite')->find($id);
-        if (!$user) {
-            return response()->json(['message' => 'Cagnotte introuvable'], 404);
-        }
-        return response()->json(['user' => $user]);
+        //
     }
 
     /**
