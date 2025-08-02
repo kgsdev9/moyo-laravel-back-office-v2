@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\Modereglement;
 
 use App\Http\Controllers\Controller;
-use App\Models\ModeReglement;
+use App\Services\ModeReglementService;
 
 class ModereglementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    protected ModeReglementService $service;
+
+    public function __construct(ModeReglementService $service)
     {
-        $modereglements = ModeReglement::all();
-        
-        return response()->json($modereglements);
+        $this->service = $service;
     }
 
+    public function index()
+    {
+        $modereglements = $this->service->getAll();
 
+        return response()->json([
+            'success' => true,
+            'data' => $modereglements,
+        ]);
+    }
 }

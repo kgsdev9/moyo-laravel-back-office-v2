@@ -44,11 +44,13 @@ class User extends Authenticatable
         'payment'
     ];
 
-
+    //description
     public function coffre()
     {
         return $this->hasOne(Coffre::class);
     }
+
+
 
     public function ville()
     {

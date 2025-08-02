@@ -3,98 +3,35 @@
 namespace App\Http\Controllers\Service;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Services\ServiceUserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    protected ServiceUserService $service;
+
+    public function __construct(ServiceUserService $service)
     {
-        $query = User::with('specialite')
-            ->whereIn('role', ['formateur', 'repetiteur', 'encadreur'])
-            ->where('statusCompte', true);
+        $this->service = $service;
+    }
 
-        if ($request->has('specialite_id')) {
-            $query->where('specialite_id', $request->specialite_id);
-        }
-
-        $users = $query->paginate(40);
+    public function index(Request $request): JsonResponse
+    {
+        $filters = $request->only(['specialite_id']);
+        $users = $this->service->getUsers($filters);
 
         return response()->json($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show(int $id): JsonResponse
     {
-        //
-    }
+        $user = $this->service->getUserById($id);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $id)
-    {
-        $user = User::with('specialite')->find($id);
         if (!$user) {
-            return response()->json(['message' => 'Cagnotte introuvable'], 404);
+            return response()->json(['message' => 'Utilisateur introuvable'], 404);
         }
+
         return response()->json(['user' => $user]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

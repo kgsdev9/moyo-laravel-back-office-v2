@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\API\Auth\UpdateProfilCompteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Modereglement\ModereglementController;
 use App\Http\Controllers\Solde\SoldeController;
 use App\Http\Controllers\Transactions\TransactionController;
-use App\Http\Controllers\API\CategorySchoolController;
-use App\Http\Controllers\API\EcoleController;
+use App\Http\Controllers\CategorySchoolController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Cagnote\CagnoteController;
 use App\Http\Controllers\Coffre\CoffreController;
 use App\Http\Controllers\Commune\CommuneController;
+use App\Http\Controllers\EcoleController;
 use App\Http\Controllers\Scolarite\ScolariteController;
 use App\Http\Controllers\Service\ServiceController;
 use App\Http\Controllers\Specialite\SpecialiteController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\UpdateProfilCompteController;
 
 /*
 |--------------------------------------------------------------------------

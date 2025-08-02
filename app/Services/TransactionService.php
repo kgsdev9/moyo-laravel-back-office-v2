@@ -35,6 +35,41 @@ class TransactionService
         return response()->json($transactions);
     }
 
+    public function getTransactionUsingTransfert(string $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Utilisateur introuvable.'
+            ], 404);
+        }
+
+        $transactions = Transaction::where('user_id', $user->id)
+            ->where('typeoperation', 'transfert')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($transactions);
+    }
+
+    public function getTransactionHorsTransfert(string $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'error' => 'Utilisateur introuvable.'
+            ], 404);
+        }
+        $transactions = Transaction::where('user_id', $user->id)
+            ->where('typeoperation', '!=', 'transfert')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($transactions);
+    }
+
     public function getTransactionByUser(string $id): JsonResponse
     {
         $user = User::find($id);
@@ -57,7 +92,6 @@ class TransactionService
         $user = User::where('telephone', $data['phone'])->firstOrFail();
         $typeoperation = 'depot';
         return DB::transaction(function () use ($data, $user, $typeoperation) {
-            // 1. Création de la transaction
             $transaction = Transaction::create([
                 'user_id'          => $user->id,
                 'name'             => "Recharge Compte",
@@ -95,8 +129,7 @@ class TransactionService
 
     public function getTransactionById(int $id): Transaction
     {
-        $transaction = Transaction::find($id);
-
+        $transaction = Transaction::with(['ecole', 'user'])->find($id);
         if (!$transaction) {
             throw new ModelNotFoundException("Transaction introuvable.");
         }
