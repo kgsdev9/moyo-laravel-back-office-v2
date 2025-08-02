@@ -23,10 +23,12 @@ class CreateEnfantsTable extends Migration
             $table->unsignedBigInteger('ville_id')->nullable();
             $table->unsignedBigInteger('pays_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('classe_id')->nullable();
             $table->foreign('ecole_id')->references('id')->on('ecoles')->nullOnDelete();
             $table->foreign('ville_id')->references('id')->on('villes')->cascadeOnDelete();
             $table->foreign('pays_id')->references('id')->on('pays')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('classe_id')->references('id')->on('classes')->cascadeOnDelete();
             $table->timestamps();
         });
     }

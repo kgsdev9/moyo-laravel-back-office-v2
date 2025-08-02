@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Cagnote;
 use App\Http\Controllers\Controller;
 use App\Models\Cagnote;
 use App\Models\CagnoteSouscriveur;
+use App\Models\Solde;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 class CagnoteController extends Controller
 {
     /**
@@ -30,7 +34,7 @@ class CagnoteController extends Controller
      */
     public function store(Request $request)
     {
-        $cagnotte = CagnoteSouscriveur::create([
+        $cagnotte = Cagnote::create([
             'code' => strtoupper(Str::random(10)),
             'nom' => $request->nom ?? 'test',
             'description' => $request->description ?? 'test',
@@ -53,9 +57,88 @@ class CagnoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        $cagnote = Cagnote::with('user')->find($id);
+
+        if (!$cagnote) {
+            return response()->json(['message' => 'Cagnotte introuvable'], 404);
+        }
+
+        // Calcul du pourcentage
+        $objectif = $cagnote->montant_objectif;
+        $collecte = $cagnote->montant_collecte;
+        $pourcentage = $objectif > 0 ? round(($collecte / $objectif) * 100, 2) : 0;
+
+        return response()->json([
+            'cagnote' => [
+                'id' => $cagnote->id,
+                'nom' => $cagnote->nom,
+                'description' => $cagnote->description,
+                'montant_objectif' => $objectif,
+                'montant_collecte' => $collecte,
+                'pourcentage' => $pourcentage,
+                'user_nomcomplet' => $cagnote->user->nomcomplet ?? null,
+                'date_limite' => $cagnote->date_limite,
+                'status' => $cagnote->status,
+            ],
+        ]);
+    }
+
+
+    public function participer(Request $request)
+    {
+        // $request->validate([
+        //     'cagnotte_id' => 'required|exists:cagnotes,id',
+        //     'montant'     => 'required|numeric|min:1',
+        //     'user_id'     => 'required|exists:users,id',
+        // ]);
+
+        $cagnotte = Cagnote::findOrFail($request->cagnotte_id);
+        $solde = Solde::where('user_id', $request->user_id)->first();
+
+        if (!$solde || $solde->solde < $request->montant) {
+            return response()->json(['message' => 'Solde insuffisant.'], 400);
+        }
+
+        // Début transaction DB pour sécurité
+        DB::beginTransaction();
+
+        try {
+            // Retirer le montant du solde utilisateur
+            $solde->solde -= $request->montant;
+            $solde->save();
+
+            // Augmenter le montant_collecte de la cagnotte
+            $cagnotte->montant_collecte += $request->montant;
+            $cagnotte->save();
+
+            // // Calculer pourcentage (optionnel, selon ta logique)
+            // $pourcentage = ($cagnotte->montant_collecte / $cagnotte->montant_objectif) * 100;
+            // $cagnotte->pourcentage = round($pourcentage, 2);
+            // $cagnotte->save();
+            // Enregistrer la transaction
+            Transaction::create([
+                'user_id'       => $request->user_id,
+                'name'          => "Participation à la cagnotte ({$request->montant} FCFA)",
+                'reference'     => strtoupper(Str::random(10)), // ou uniqid('REF-')
+                'montant'       => +$request->montant,
+                'typeoperation' => 'cagnote',
+                'status'        => 'succes',
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Participation enregistrée avec succès.',
+                'nouveau_solde' => $solde->solde,
+                'montant_collecte' => $cagnotte->montant_collecte,
+                'pourcentage' => $cagnotte->pourcentage,
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Erreur lors de la participation.'], 500);
+        }
     }
 
     /**
@@ -69,4 +152,3 @@ class CagnoteController extends Controller
         //
     }
 }
-

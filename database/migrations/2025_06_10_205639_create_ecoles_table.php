@@ -27,7 +27,7 @@ class CreateEcolesTable extends Migration
             $table->string('logo')->nullable();
             $table->string('num_rccm')->nullable();
             $table->boolean('active')->default(false);
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreignId('category_school_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();

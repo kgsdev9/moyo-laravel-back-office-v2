@@ -17,6 +17,7 @@ class Enfant extends Model
         'user_id',
         'ecole_id',
         'ville_id',
+        'classe_id',
         'pays_id',
     ];
 

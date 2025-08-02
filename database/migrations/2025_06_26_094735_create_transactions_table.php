@@ -26,6 +26,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('modereglement_id')->nullable();
             $table->unsignedBigInteger('ecole_id')->nullable();
             $table->unsignedBigInteger('entreprise_id')->nullable();
+            $table->unsignedBigInteger('cagnote_id')->nullable();
             $table->enum('typeoperation', ['depot', 'retrait', 'transfert', 'scolarite', 'facture', 'paiement', 'debit', 'crediter', 'credit', 'cagnote']);
             $table->enum('status', ['encours', 'succes', 'echec'])->default('encours');
             $table->text('observation')->nullable();
@@ -37,6 +38,7 @@ class CreateTransactionsTable extends Migration
             $table->foreign('ecole_id')->references('id')->on('ecoles')->nullOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('entreprise_id')->references('id')->on('entreprises')->cascadeOnDelete();
+            $table->foreign('cagnote_id')->references('id')->on('cagnotes')->cascadeOnDelete();
             $table->timestamps();
         });
     }

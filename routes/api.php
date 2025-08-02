@@ -48,14 +48,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);
     Route::post('/update-or-create-profil', [UpdateProfilCompteController::class, 'updateOrCreateProfil']);
-    // fonctionnalites coffres
     Route::get('/coffre/solde/{user_id}', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/transaction', [CoffreController::class, 'creditOrDebit']);
+    Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
     Route::apiResource('communes', CommuneController::class);
     Route::get('/coffres/{user_id}/solde', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/operation', [CoffreController::class, 'creditOrDebit']);
-
 });
 
 
@@ -64,6 +63,3 @@ Route::get('/ecoles', [EcoleController::class, 'index']);
 
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
 Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
-
-
-
