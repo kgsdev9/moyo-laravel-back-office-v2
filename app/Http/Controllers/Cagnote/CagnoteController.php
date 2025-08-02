@@ -35,13 +35,13 @@ class CagnoteController extends Controller
     {
         $cagnotte = Cagnote::create([
             'code' => strtoupper(Str::random(10)),
-            'nom' => $request->nom ?? 'test',
-            'description' => $request->description ?? 'test',
-            'montant_objectif' => $request->montant_objectif ?? 'tesdd',
+            'nom' => $request->nom ,
+            'description' => $request->description,
+            'montant_objectif' => $request->montant_objectif,
             'montant_collecte' => 0,
             'date_limite' => $request->date_limite ?? now()->addWeeks(2),
             'status' => 'encours',
-            'user_id' => 1,
+            'user_id' => $request->user_id,
         ]);
 
         return response()->json([

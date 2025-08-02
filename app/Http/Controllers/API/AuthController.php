@@ -65,9 +65,9 @@ class AuthController extends Controller
             'expires_at' => $expiresAt,
         ], now()->addMinutes(5));
 
-        $email ='kgsdev8@gmail.com';
+        $email = 'kgsdev8@gmail.com';
         Mail::to($email)->send(new SendVerificationCodeMail($code));
-        
+
         return response()->json([
             'message' => 'Code envoyé par e-mail',
             'code' => $code
@@ -108,17 +108,25 @@ class AuthController extends Controller
         if (!$user) {
             $user = User::create([
                 'telephone' => $phone,
-                'role' => 'client', // ou autre valeur par défaut
+                'role' => 'client',
                 'qrcode' => User::generateQrCode(),
             ]);
         }
 
-        // Ici, **ne pas générer ni renvoyer de token**
+        // Vérifier ou créer le coffre pour l'utilisateur
+        if (!$user->coffre) {
+            $user->coffre()->create([
+                'solde' => 0,
+                'date_expiration' => now()->addYear(), // ou autre règle métier
+            ]);
+        }
+
         return response()->json([
-            // 'token' => $token, // supprimé
             'user' => $user,
+            'coffre' => $user->coffre, // optionnel
         ]);
     }
+
 
     public function login(Request $request)
     {

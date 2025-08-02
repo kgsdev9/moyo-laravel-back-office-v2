@@ -20,18 +20,18 @@ class UpdateProfilCompteController extends Controller
         // Cherche l'utilisateur existant ou en crée un nouveau sans le sauvegarder encore
         $user = User::firstOrNew(['id' => $request->user_id]);
 
-        // Upload piece_recto si présent
-        if ($request->hasFile('piece_recto') && $request->file('piece_recto')->isValid()) {
+          if ($request->hasFile('piece_recto') && $request->file('piece_recto')->isValid()) {
             $file = $request->file('piece_recto');
-            $originalName = $file->getClientOriginalName();
-            $user->piece_recto = $file->storeAs('pieces', $originalName);
+            $filename = md5(file_get_contents($file) . microtime()) . '.' . $file->extension();
+            $path = $file->storeAs('pieces', $filename);
+            $user->piece_recto = $path;
         }
 
-        // Upload piece_verso si présent
         if ($request->hasFile('piece_verso') && $request->file('piece_verso')->isValid()) {
             $file = $request->file('piece_verso');
-            $originalName = $file->getClientOriginalName();
-            $user->piece_verso = $file->storeAs('pieces', $originalName);
+            $filename = md5(file_get_contents($file) . microtime()) . '.' . $file->extension();
+            $path = $file->storeAs('pieces', $filename);
+            $user->piece_verso = $path;
         }
 
         // Mise à jour des infos texte

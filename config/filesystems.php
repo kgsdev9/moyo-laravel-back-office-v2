@@ -32,7 +32,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root'   => public_path() . '/s3',
+            'throw' => false,
         ],
 
         'public' => [
@@ -67,7 +68,8 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        // public_path('storage') => storage_path('app/public'),
+        public_path('storage/photos') => storage_path('app/photos'),
     ],
 
 ];

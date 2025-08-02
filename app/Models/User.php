@@ -44,16 +44,17 @@ class User extends Authenticatable
         'payment'
     ];
 
-    public function user()
+
+    public function coffre()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Coffre::class);
     }
 
     public function ville()
     {
         return $this->belongsTo(Ville::class);
     }
-      public function specialite()
+    public function specialite()
     {
         return $this->belongsTo(Specialite::class);
     }
