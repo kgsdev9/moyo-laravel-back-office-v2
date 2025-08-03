@@ -8,6 +8,6 @@ class ModeReglementService
 {
     public function getAll()
     {
-        return ModeReglement::orderBy('name')->get(); 
+        return ModeReglement::all();
     }
 }

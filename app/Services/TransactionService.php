@@ -98,9 +98,8 @@ class TransactionService
                 'reference'        => uniqid('REF-'),
                 'montant'          => $data['amount'],
                 'typeoperation'    => $typeoperation,
-                'modereglement_id' => $data['modereglement_id'] ?? null,
+                'modereglement_id' => $data['mode_reglement_id'] ?? null,
                 'status'           => 'succes',
-                'observation'      => 'observation',
             ]);
 
             // 2. Récupération ou création du solde de l'utilisateur
