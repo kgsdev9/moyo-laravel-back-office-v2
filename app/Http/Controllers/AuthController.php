@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -98,6 +99,31 @@ class AuthController extends Controller
             'token' => $token,
         ]);
     }
+    public function verifyPassword(Request $request)
+    {
+
+        $user = User::find($request->user_id);
+
+        if (!$user) {
+            return response()->json(['error' => 'Utilisateur introuvable'], 404);
+        }
+
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json(['valid' => true], 200);
+        }
+
+        return response()->json(['valid' => false], 401);
+    }
+
+    public function updatePin(Request $request)
+    {
+        $user = User::find($request->user_id);
+        $user->codeSecret = Hash::make($request->pin);
+        $user->save();
+
+        return response()->json(['message' => 'PIN mis à jour avec succès']);
+    }
+
 
     public function setSecret(Request $request)
     {

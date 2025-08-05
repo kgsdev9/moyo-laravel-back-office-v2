@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('cv')->nullable();
             $table->string('profession')->nullable();
+            $table->string('description')->nullable();
             // Pièces d'identité
             $table->string('piece_recto')->nullable();
             $table->string('piece_verso')->nullable();

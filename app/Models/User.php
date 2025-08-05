@@ -41,10 +41,11 @@ class User extends Authenticatable
         'specialite_id',
         'pays_id',
         'date_livraison',
-        'payment'
+        'payment',
+        'description',
     ];
 
-    //description
+
     public function coffre()
     {
         return $this->hasOne(Coffre::class);

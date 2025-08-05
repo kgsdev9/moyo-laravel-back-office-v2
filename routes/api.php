@@ -66,3 +66,8 @@ Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
 Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+
+
+
+Route::post('/auth/verify-password', [AuthController::class, 'verifyPassword']);
+Route::post('/auth/update-pin', [AuthController::class, 'updatePin']);
