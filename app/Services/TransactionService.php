@@ -35,7 +35,7 @@ class TransactionService
         return response()->json($transactions);
     }
 
-    public function getTransactionUsingTransfert(string $id): JsonResponse
+    public function getTransactionByUser(string $id, int $arg): JsonResponse
     {
         $user = User::find($id);
 
@@ -45,47 +45,29 @@ class TransactionService
             ], 404);
         }
 
-        $transactions = Transaction::where('user_id', $user->id)
-            ->where('typeoperation', 'transfert')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $query = Transaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc');
 
-        return response()->json($transactions);
-    }
-
-    public function getTransactionHorsTransfert(string $id): JsonResponse
-    {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json([
-                'error' => 'Utilisateur introuvable.'
-            ], 404);
-        }
-        $transactions = Transaction::where('user_id', $user->id)
-            ->where('typeoperation', '!=', 'transfert')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->json($transactions);
-    }
-
-    public function getTransactionByUser(string $id): JsonResponse
-    {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json([
-                'error' => 'Utilisateur introuvable.'
-            ], 404);
+        if ($arg === 1)
+        {
+            $query->where('typeoperation', '!=', 'transfert')->limit(6);
         }
 
-        $transactions = Transaction::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if($arg == 2)
+        {
+            $query->where('typeoperation', '!=', 'transfert')->limit(200);
+        }
+
+         if($arg == 3)
+        {
+            $query->where('typeoperation', 'like', 'transfert')->limit(200);
+        }
+
+        $transactions = $query->get();
 
         return response()->json($transactions);
     }
+
 
     public function createTransaction(array $data)
     {

@@ -23,11 +23,11 @@ class TransactionController extends Controller
         return $this->transactionService->getByPhone($phone);
     }
 
-    public function getTransactionByUser($id)
+    public function getTransactionByUser(Request $request, $id)
     {
-        return $this->transactionService->getTransactionByUser($id);
+        $arg = $request->query('arg', 1);
+        return $this->transactionService->getTransactionByUser($id, $arg);
     }
-
     public function store(Request $request)
     {
         try {

@@ -16,6 +16,7 @@ use App\Http\Controllers\Service\ServiceController;
 use App\Http\Controllers\Specialite\SpecialiteController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UpdateProfilCompteController;
+use App\Http\Controllers\Ville\VilleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,10 +56,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
     Route::apiResource('communes', CommuneController::class);
+    Route::apiResource('villes', VilleController::class);
     Route::apiResource('services', ServiceController::class);
     Route::apiResource('specialites', SpecialiteController::class);
     Route::get('/coffres/{user_id}/solde', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/operation', [CoffreController::class, 'creditOrDebit']);
+
+
 });
 
 

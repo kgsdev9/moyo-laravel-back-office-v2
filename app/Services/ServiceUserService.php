@@ -23,6 +23,14 @@ class ServiceUserService
             $query->where('specialite_id', $filters['specialite_id']);
         }
 
+        if (!empty($filters['ville_id'])) {
+            $query->where('ville_id', $filters['ville_id']);
+        }
+
+        if (!empty($filters['commune_id'])) {
+            $query->where('commune_id', $filters['commune_id']);
+        }
+
         return $query->paginate($perPage);
     }
 
