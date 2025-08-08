@@ -48,18 +48,15 @@ class TransactionService
         $query = Transaction::where('user_id', $user->id)
             ->orderBy('created_at', 'desc');
 
-        if ($arg === 1)
-        {
+        if ($arg === 1) {
             $query->where('typeoperation', '!=', 'transfert')->limit(6);
         }
 
-        if($arg == 2)
-        {
+        if ($arg == 2) {
             $query->where('typeoperation', '!=', 'transfert')->limit(200);
         }
 
-         if($arg == 3)
-        {
+        if ($arg == 3) {
             $query->where('typeoperation', 'like', 'transfert')->limit(200);
         }
 
@@ -68,12 +65,31 @@ class TransactionService
         return response()->json($transactions);
     }
 
-
     public function createTransaction(array $data)
     {
-        $user = User::where('telephone', $data['phone'])->firstOrFail();
+        $user = User::where('id', $data['userId'])->firstOrFail();
         $typeoperation = 'depot';
+
         return DB::transaction(function () use ($data, $user, $typeoperation) {
+            // Simuler appel API selon mode_reglement_id
+            if ($data['mode_reglement_id'] == 1) {
+                // Appel API Wave (simulation)
+                $this->callWaveApi($data);
+            } elseif ($data['mode_reglement_id'] == 2) {
+                // Appel API Orange Money (simulation)
+                $this->callOrangeMoneyApi($data);
+            } elseif ($data['mode_reglement_id'] == 3) {
+                // Appel API Mtn Money (simulation)
+                $this->callOrangeMoovApi($data);
+            }  elseif ($data['mode_reglement_id'] == 4) {
+                // Appel API Moov Money (simulation)
+                $this->callOrangeMoovApi($data);
+            }
+
+            else {
+                throw new \Exception("Mode de règlement non supporté pour la simulation.");
+            }
+
             $transaction = Transaction::create([
                 'user_id'          => $user->id,
                 'name'             => "Recharge Compte",
@@ -81,17 +97,15 @@ class TransactionService
                 'montant'          => $data['amount'],
                 'typeoperation'    => $typeoperation,
                 'modereglement_id' => $data['mode_reglement_id'] ?? null,
+                'telephone' => $data['phone'],
                 'status'           => 'succes',
             ]);
 
-            // 2. Récupération ou création du solde de l'utilisateur
             $solde = Solde::firstOrCreate(
                 ['user_id' => $user->id],
                 ['solde' => 0]
             );
 
-
-            // 3. Mise à jour du solde selon le type d'opération
             if ($typeoperation === 'depot') {
                 $solde->solde = ($solde->solde ?? 0) + $data['amount'];
             } elseif ($typeoperation === 'retrait') {
@@ -101,13 +115,49 @@ class TransactionService
                 $solde->solde -= $data['amount'];
             }
 
-            // 4. Sauvegarde
             $solde->save();
-
             return $transaction;
         });
     }
 
+    /**
+     * Simule l'appel à l'API Wave
+     */
+    private function callWaveApi(array $data)
+    {
+
+        // Exemple : log pour simuler l'appel API
+        \Log::info("Appel API Wave pour user {$data['userId']} avec montant {$data['amount']}");
+
+        // Ici tu peux faire un vrai appel HTTP si besoin avec Guzzle ou autre
+        // Par exemple:
+        // $response = Http::post('https://api.wave.com/transaction', [...]);
+        // vérifier $response->successful() etc.
+    }
+
+    /**
+     * Simule l'appel à l'API Orange Money
+     */
+    private function callOrangeMoneyApi(array $data)
+    {
+        \Log::info("Appel API Orange Money pour user {$data['userId']} avec montant {$data['amount']}");
+
+        // Similaire à Wave, tu peux ici appeler un service externe réel
+    }
+
+    private function callOrangeMtnApi(array $data)
+    {
+        \Log::info("Appel API Mtn Money pour user {$data['userId']} avec montant {$data['amount']}");
+
+        // Similaire à Wave, tu peux ici appeler un service externe réel
+    }
+
+    private function callOrangeMoovApi(array $data)
+    {
+        \Log::info("Appel API Moov Money pour user {$data['userId']} avec montant {$data['amount']}");
+
+        // Similaire à Wave, tu peux ici appeler un service externe réel
+    }
     public function getTransactionById(int $id): Transaction
     {
         $transaction = Transaction::with(['ecole', 'user'])->find($id);

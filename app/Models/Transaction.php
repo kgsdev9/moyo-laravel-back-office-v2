@@ -27,6 +27,7 @@ class Transaction extends Model
         'user_id',
         'sender_id',
         'recepteur_id',
+        'telephone'
     ];
 
     public function modeReglement()
