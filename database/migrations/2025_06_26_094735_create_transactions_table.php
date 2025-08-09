@@ -27,7 +27,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('ecole_id')->nullable();
             $table->unsignedBigInteger('entreprise_id')->nullable();
             $table->unsignedBigInteger('cagnote_id')->nullable();
-            $table->enum('typeoperation', ['depot', 'retrait', 'transfert', 'scolarite', 'facture', 'paiement', 'debit', 'crediter', 'credit', 'cagnote']);
+            $table->enum('typeoperation', ['depot', 'retrait', 'transfert', 'scolarite', 'facture', 'paiement', 'debit', 'crediter', 'credit', 'cagnote', 'abonnement', 'activation']);
             $table->enum('status', ['encours', 'succes', 'echec'])->default('encours');
             $table->text('observation')->nullable();
             $table->text('description')->nullable();

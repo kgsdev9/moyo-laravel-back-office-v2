@@ -43,6 +43,9 @@ class User extends Authenticatable
         'date_livraison',
         'payment',
         'description',
+        'dernier_paiement_abonnement',
+        'trimestres_impayes',
+        'dernier_essai_prelevement',
     ];
 
 
@@ -80,6 +83,7 @@ class User extends Authenticatable
         'statusCompte' => 'boolean',
         'confirmated_at' => 'datetime',
         'dateexpiration' => 'date',
+        'dernier_paiement_abonnement' => 'datetime',
     ];
 
     public function ecole()

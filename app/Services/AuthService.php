@@ -73,7 +73,7 @@ class AuthService
         return null;
     }
 
-    public function setSecret(int $userId, string $pin): ?User
+    public function setSecret(int $userId, string $pin, string $nomComplet): ?User
     {
         $user = User::find($userId);
         if (!$user) return null;
@@ -83,6 +83,7 @@ class AuthService
         $user->update([
             'codeSecret' => $hashed,
             'password'   => $hashed,
+            'nomcomplet'   => $nomComplet,
         ]);
 
         return $user;

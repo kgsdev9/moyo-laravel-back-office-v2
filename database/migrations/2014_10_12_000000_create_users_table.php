@@ -32,6 +32,8 @@ class CreateUsersTable extends Migration
             $table->string('piece_recto')->nullable();
             $table->string('piece_verso')->nullable();
 
+            $table->timestamp('dernier_paiement_abonnement')->nullable();
+            $table->unsignedInteger('trimestres_impayes')->default(0);
             // Authentification
             $table->string('password')->nullable();
             $table->string('codeSecret')->nullable();

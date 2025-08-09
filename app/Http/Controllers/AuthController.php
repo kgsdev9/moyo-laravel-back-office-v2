@@ -133,7 +133,7 @@ class AuthController extends Controller
         ]);
 
         try {
-            $user = $this->auth->setSecret($request->userId, $request->pin);
+            $user = $this->auth->setSecret($request->userId, $request->pin, $request->nomComplet);
             if (!$user) return response()->json(['error' => 'Utilisateur non trouvé'], 404);
 
             $token = $user->createToken('mobile_token')->plainTextToken;

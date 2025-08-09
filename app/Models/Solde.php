@@ -9,7 +9,12 @@ class Solde extends Model
 {
     use HasFactory;
 
-     protected $fillable = ['user_id', 'solde'];
+    protected $fillable = ['user_id', 'solde'];
 
-     public $timestamps = false;
+    public $timestamps = false;
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
 }
