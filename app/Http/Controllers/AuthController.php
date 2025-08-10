@@ -36,6 +36,35 @@ class AuthController extends Controller
         ]);
     }
 
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string|exists:users,telephone',
+            'password' => 'required|string|min:4',
+        ]);
+
+        $user = User::where('telephone', $request->phone)->first();
+
+        if (!$user)
+        {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+        // Ici on stocke le codeSecret (mot de passe) hashé pour sécurité
+        $user->codeSecret = Hash::make($request->password);
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Si tu utilises token JWT ou Sanctum, crée un token et renvoie-le
+        $token = $user->createToken('mobile_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Mot de passe mis à jour avec succès',
+            'token' => $token,
+            'user' => $user,
+        ]);
+    }
+
     public function sendCode(Request $request)
     {
         $request->validate(['phone' => 'required|string']);
@@ -43,14 +72,27 @@ class AuthController extends Controller
 
         $user = User::where('telephone', $phone)->first();
         if ($user) {
-            return response()->json([
-                'user' => [
-                    'id' => $user->id,
-                    'phone' => $user->telephone,
-                    'role' => $user->role,
-                ]
-            ]);
+            if ($user->codeSecret == '' || $user->codeSecret == null) {
+                return response()->json([
+                    'user' => [
+                        'id' => $user->id,
+                        'phone' => $user->telephone,
+                        'role' => $user->role,
+                        'newscodeadefinir' => 1
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'user' => [
+                        'id' => $user->id,
+                        'phone' => $user->telephone,
+                        'role' => $user->role,
+                        'newscodeadefinir' => 0
+                    ]
+                ]);
+            }
         }
+
 
         $data = $this->auth->sendVerificationCode($phone);
 

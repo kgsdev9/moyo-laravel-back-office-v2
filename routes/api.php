@@ -36,6 +36,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/send-code', [AuthController::class, 'sendCode']);
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/maj/profile', [AuthController::class, 'setSecret']);
+Route::post('/user/update-password', [AuthController::class, 'updatePassword']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
@@ -51,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions', [TransactionController::class, 'store']);
     Route::get('/modereglements', [ModereglementController::class, 'index']);
     Route::post('/update-or-create-profil', [UpdateProfilCompteController::class, 'updateOrCreateProfil']);
+    Route::post('/profile/verify-documents', [UpdateProfilCompteController::class, 'verifyDocuments']);
     Route::get('/coffre/solde/{user_id}', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/transaction', [CoffreController::class, 'creditOrDebit']);
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
