@@ -45,6 +45,7 @@ class CreateUsersTable extends Migration
             $table->string('numerocarte')->nullable();
             $table->date('dateexpiration')->nullable();
             $table->string('couleur_carte')->nullable();
+            $table->string('pays')->nullable();
 
             // Statut et rôle
             $table->date('confirmated_at')->nullable();
@@ -72,6 +73,7 @@ class CreateUsersTable extends Migration
             ])->default('client');
             $table->boolean('statusCompte')->default(false);
             $table->boolean('payment')->default(0);
+            $table->boolean('epargnescolaire')->default(0);
 
             // Relations géographiques
             $table->foreignId('ville_id')->nullable()->constrained('villes')->nullOnDelete();

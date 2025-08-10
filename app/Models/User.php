@@ -21,6 +21,7 @@ class User extends Authenticatable
         'avatar',
         'password',
         'codeSecret',
+        'pays',
         'publicKey',
         'qrcode',
         'cvv',
