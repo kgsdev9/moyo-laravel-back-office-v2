@@ -18,15 +18,16 @@ class CreateArticlesTable extends Migration
             $table->string('code')->unique();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('libelle');
+            $table->string('quantite');
             $table->text('description')->nullable();
             $table->decimal('pu', 12, 2);
-            $table->boolean('disponibilite')->default(0);
+            $table->boolean('disponibilite')->default(1);
             $table->timestamps();
         });
     }
 
 
-    
+
 
     public function down()
     {

@@ -85,6 +85,7 @@ class CreateUsersTable extends Migration
 
             // Divers
             $table->date('date_livraison')->nullable();
+            $table->timestamp('dernier_essai_prelevement')->nullable();
 
             $table->timestamps();
         });

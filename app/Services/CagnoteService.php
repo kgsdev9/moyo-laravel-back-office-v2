@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Cagnote;
 use App\Models\Solde;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

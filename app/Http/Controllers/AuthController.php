@@ -46,8 +46,7 @@ class AuthController extends Controller
 
         $user = User::where('telephone', $request->phone)->first();
 
-        if (!$user)
-        {
+        if (!$user) {
             return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
         // Ici on stocke le codeSecret (mot de passe) hashé pour sécurité
@@ -101,6 +100,29 @@ class AuthController extends Controller
             'code'    => $data['code'],
         ]);
     }
+
+
+    public function sendCodeByResetPassword(Request $request)
+    {
+        $phone = $request->input('phone');
+
+        $user = User::where('telephone', $phone)->first();
+
+        if (!$user)
+        {
+            return response()->json([
+                'message' => 'Numero inconnu dans nos bases'
+            ]);
+        }
+
+        $data = $this->auth->sendVerificationCode($phone);
+
+        return response()->json([
+            'message' => 'Code envoyé par e-mail',
+            'code'    => $data['code'],
+        ]);
+    }
+
 
     public function verifyCode(Request $request)
     {

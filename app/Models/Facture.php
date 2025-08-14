@@ -5,21 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Commande extends Model
+class Facture extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'codecommande',
-        'qtecmde',
-        'montantht',
+        'codefacture',
+        'commande_id',
         'user_id',
         'adresse',
         'montantlivraison',
-        'datelivraison',
         'date_echeance',
         'remise',
         'status',
+        'montantht',
         'montantttc',
         'montanttva',
         'montantregle',

@@ -35,6 +35,8 @@ class TransactionService
         return response()->json($transactions);
     }
 
+   
+
     public function getTransactionByUser(string $id, int $arg): JsonResponse
     {
         $user = User::find($id);

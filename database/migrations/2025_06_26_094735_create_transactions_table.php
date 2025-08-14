@@ -20,14 +20,17 @@ class CreateTransactionsTable extends Migration
             $table->string('reference')->unique();
             $table->string('telephone')->default('+225');
             $table->decimal('montant', 12, 2)->default(0);
-            $table->string('solderestant')->nullable();
+            $table->decimal('montantrestant', 12, 2)->default(0);
+            $table->decimal('solderestant',12, 2)->nullable();
             $table->decimal('fraisoperateur', 12, 2)->default(0);
             $table->decimal('fraisservice', 12, 2)->default(0);
             $table->unsignedBigInteger('modereglement_id')->nullable();
             $table->unsignedBigInteger('ecole_id')->nullable();
             $table->unsignedBigInteger('entreprise_id')->nullable();
             $table->unsignedBigInteger('cagnote_id')->nullable();
-            $table->enum('typeoperation', ['depot', 'retrait', 'transfert', 'scolarite', 'facture', 'paiement', 'debit', 'crediter', 'credit', 'cagnote', 'abonnement', 'activation']);
+            $table->unsignedBigInteger('facture_id')->nullable();
+            $table->unsignedBigInteger('commande_id')->nullable();
+            $table->enum('typeoperation', ['depot', 'retrait', 'transfert', 'scolarite', 'facture', 'paiement', 'debit', 'crediter', 'credit', 'cagnote', 'abonnement', 'activation', 'fourniture', 'commande']);
             $table->enum('status', ['encours', 'succes', 'echec'])->default('encours');
             $table->text('observation')->nullable();
             $table->text('description')->nullable();
@@ -35,6 +38,8 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('sender_id')->nullable();
             $table->unsignedBigInteger('recepteur_id')->nullable();
             $table->foreign('modereglement_id')->references('id')->on('mode_reglements')->nullOnDelete();
+            $table->foreign('facture_id')->references('id')->on('factures')->nullOnDelete();
+            $table->foreign('commande_id')->references('id')->on('commandes')->nullOnDelete();
             $table->foreign('ecole_id')->references('id')->on('ecoles')->nullOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('entreprise_id')->references('id')->on('entreprises')->cascadeOnDelete();

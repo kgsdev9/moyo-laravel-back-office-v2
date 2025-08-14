@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Article\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Modereglement\ModereglementController;
@@ -34,6 +35,9 @@ use App\Http\Controllers\Ville\VilleController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/send-code', [AuthController::class, 'sendCode']);
+
+Route::post('/reset/pin', [AuthController::class, 'sendCodeByResetPassword']);
+
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/maj/profile', [AuthController::class, 'setSecret']);
 Route::post('/user/update-password', [AuthController::class, 'updatePassword']);
@@ -59,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
     Route::apiResource('communes', CommuneController::class);
+    Route::apiResource('articles', ArticleController::class);
     Route::apiResource('villes', VilleController::class);
     Route::apiResource('services', ServiceController::class);
     Route::apiResource('specialites', SpecialiteController::class);

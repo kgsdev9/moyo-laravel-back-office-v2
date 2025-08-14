@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Article extends Model
+class CommandeLigne extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'code',
+        'commande_id',
+        'article_id',
         'quantite',
-        'category_id',
-        'libelle',
-        'description',
+        'remise',
         'pu',
-        'librairy_id',
-        'disponibilite'
+        'montantht',
+        'montanttva',
+        'montantttc',
     ];
 }

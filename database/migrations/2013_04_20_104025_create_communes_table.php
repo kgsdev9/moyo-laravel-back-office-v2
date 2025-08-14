@@ -17,6 +17,7 @@ class CreateCommunesTable extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('active')->default(false);
+            $table->integer('montantlivraison')->default('1500');
             $table->timestamps();
         });
     }

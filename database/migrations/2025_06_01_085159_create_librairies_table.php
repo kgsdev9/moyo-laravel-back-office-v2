@@ -15,7 +15,7 @@ class CreateLibrairiesTable extends Migration
     {
         Schema::create('librairies', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique()->nullable(); // Code interne ou généré
+            $table->string('code')->unique()->nullable();
             $table->string('nom');
             $table->string('email')->nullable();
             $table->string('adresse')->nullable();
@@ -24,7 +24,7 @@ class CreateLibrairiesTable extends Migration
             $table->unsignedBigInteger('pays_id')->nullable();
 
             $table->boolean('active')->default(true);
-            $table->string('nrcccm')->nullable(); // Numéro du Registre de Commerce
+            $table->string('nrcccm')->nullable();
 
             $table->timestamps();
 
