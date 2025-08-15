@@ -17,26 +17,6 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
-    public function register(Request $request)
-    {
-        $user = User::create([
-            'name'        => $request->name,
-            'phone'       => $request->phone,
-            'email'       => $request->email,
-            'pin'         => bcrypt($request->pin),
-            'codemembre'  => User::generateCodeMembre(),
-            'qrcode'      => User::generateQrCode(),
-        ]);
-
-        $token = $user->createToken('mobile_token')->plainTextToken;
-
-        return response()->json([
-            'user'  => $user,
-            'token' => $token,
-        ]);
-    }
-
-
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -101,6 +81,42 @@ class AuthController extends Controller
         ]);
     }
 
+    public function createOrUpdateProfilUser(Request $request)
+    {
+        // On récupère l'utilisateur via le numéro de téléphone ou on le crée
+        $user = User::firstOrNew(['telephone' => $request->phone]);
+
+        // On met à jour les champs
+        $user->nomcomplet = $request->input('nomcomplet');
+        $user->adresse = $request->input('adresse');
+        $user->commune_id = $request->input('commune');
+        $user->assignPublicKey();
+
+        // Upload des fichiers
+        if ($request->hasFile('piece_avant') && $request->file('piece_avant')->isValid()) {
+            $file = $request->file('piece_avant');
+            $filename = md5_file($file->getRealPath() . microtime()) . '.' . $file->extension();
+            $path = $file->storeAs('pieces', $filename);
+            $user->piece_recto = $path;
+        }
+        
+        if ($request->hasFile('piece_arriere') && $request->file('piece_arriere')->isValid()) {
+            $file = $request->file('piece_arriere');
+            $filename = md5_file($file->getRealPath() . microtime()) . '.' . $file->extension();
+            $path = $file->storeAs('pieces', $filename);
+            $user->piece_verso = $path;
+        }
+
+        $user->save();
+        $token = $user->createToken('mobile_token')->plainTextToken;
+
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
+    }
+
 
     public function sendCodeByResetPassword(Request $request)
     {
@@ -108,8 +124,7 @@ class AuthController extends Controller
 
         $user = User::where('telephone', $phone)->first();
 
-        if (!$user)
-        {
+        if (!$user) {
             return response()->json([
                 'message' => 'Numero inconnu dans nos bases'
             ]);

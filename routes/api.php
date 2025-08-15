@@ -41,6 +41,7 @@ Route::post('/reset/pin', [AuthController::class, 'sendCodeByResetPassword']);
 Route::post('/verify-code', [AuthController::class, 'verifyCode']);
 Route::post('/maj/profile', [AuthController::class, 'setSecret']);
 Route::post('/user/update-password', [AuthController::class, 'updatePassword']);
+Route::post('/profile/updateProfilUser', [AuthController::class, 'createOrUpdateProfilUser']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -62,7 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/coffre/transaction', [CoffreController::class, 'creditOrDebit']);
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
-    Route::apiResource('communes', CommuneController::class);
     Route::apiResource('articles', ArticleController::class);
     Route::apiResource('villes', VilleController::class);
     Route::apiResource('services', ServiceController::class);
@@ -72,14 +72,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 });
-
-
+ Route::apiResource('communes', CommuneController::class);
 Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
 Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
-
-
 
 Route::post('/auth/verify-password', [AuthController::class, 'verifyPassword']);
 Route::post('/auth/update-pin', [AuthController::class, 'updatePin']);

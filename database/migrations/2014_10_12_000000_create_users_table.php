@@ -38,7 +38,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('codeSecret')->nullable();
             $table->string('publicKey')->nullable();
-            $table->string('qrcode')->unique();
+            $table->string('qrcode')->nullable();
 
             // Carte bancaire
             $table->string('cvv')->nullable();

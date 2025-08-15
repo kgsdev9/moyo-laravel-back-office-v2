@@ -56,6 +56,22 @@ class User extends Authenticatable
     }
 
 
+    public static function generateUniquePublicKey(): string
+    {
+        do {
+            $code = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        } while (self::where('publicKey', $code)->exists());
+
+        return $code;
+    }
+
+    public function assignPublicKey(): void
+    {
+        if (!$this->publicKey) {
+            $this->publicKey = self::generateUniquePublicKey();
+            $this->save();
+        }
+    }
 
     public function ville()
     {
