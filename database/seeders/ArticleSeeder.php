@@ -41,6 +41,7 @@ class ArticleSeeder extends Seeder
                 'disponibilite' => true,
             ],
             [
+
                 'category_id' => 1,
                 'libelle' => 'Gomme blanche',
                 'quantite' => '150',
