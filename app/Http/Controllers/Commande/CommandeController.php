@@ -68,12 +68,10 @@ class CommandeController extends Controller
         }
 
         DB::transaction(function () use ($commande, $soldeUser, $request) {
-            // Mise à jour de la commande
             $commande->montantregle += $request->montant;
             $commande->montantrestant = $commande->montantttc - $commande->montantregle;
             $commande->save();
 
-            // Mise à jour du solde utilisateur
             $soldeUser->solde -= $request->montant;
             $soldeUser->save();
         });
@@ -84,6 +82,7 @@ class CommandeController extends Controller
             'reference'        => uniqid('REF-'),
             'montant'          => $request->montant,
             'typeoperation'    => 'fourniture',
+            'commande_id'  => $commande->id,
             'status'           => 'succes',
         ]);
 
