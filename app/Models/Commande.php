@@ -15,6 +15,7 @@ class Commande extends Model
         'montantht',
         'user_id',
         'adresse',
+        'commune_id',
         'montantlivraison',
         'datelivraison',
         'date_echeance',

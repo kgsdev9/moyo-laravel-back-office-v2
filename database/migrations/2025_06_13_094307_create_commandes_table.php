@@ -24,7 +24,7 @@ class CreateCommandesTable extends Migration
             $table->date('datelivraison')->nullable();
             $table->date('date_echeance')->nullable();
             $table->decimal('remise', 15, 2)->default(0);
-            $table->enum('status', ['encours', 'livre', 'echec'])->default('encours');
+            $table->enum('status', ['solde', 'nonsolde'])->default('nonsolde');
             $table->decimal('montantttc', 15, 2)->default(0);
             $table->decimal('montanttva', 15, 2)->default(0);
             $table->decimal('montantregle', 15, 2)->default(0);

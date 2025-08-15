@@ -17,33 +17,6 @@ class AuthController extends Controller
         $this->auth = $auth;
     }
 
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'phone' => 'required|string|exists:users,telephone',
-            'password' => 'required|string|min:4',
-        ]);
-
-        $user = User::where('telephone', $request->phone)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
-        }
-        // Ici on stocke le codeSecret (mot de passe) hashé pour sécurité
-        $user->codeSecret = Hash::make($request->password);
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        // Si tu utilises token JWT ou Sanctum, crée un token et renvoie-le
-        $token = $user->createToken('mobile_token')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Mot de passe mis à jour avec succès',
-            'token' => $token,
-            'user' => $user,
-        ]);
-    }
-
     public function sendCode(Request $request)
     {
         $request->validate(['phone' => 'required|string']);
@@ -72,51 +45,39 @@ class AuthController extends Controller
             }
         }
 
-
-        $data = $this->auth->sendVerificationCode($phone);
-
         return response()->json([
-            'message' => 'Code envoyé par e-mail',
-            'code'    => $data['code'],
+            'message' => 'bienvenue',
         ]);
     }
 
     public function createOrUpdateProfilUser(Request $request)
     {
-        // On récupère l'utilisateur via le numéro de téléphone ou on le crée
+        // Récupère l'utilisateur via le numéro de téléphone ou le crée
         $user = User::firstOrNew(['telephone' => $request->phone]);
-
-        // On met à jour les champs
         $user->nomcomplet = $request->input('nomcomplet');
         $user->adresse = $request->input('adresse');
         $user->commune_id = $request->input('commune');
+        $user->codeSecret = $request->input('pin');
         $user->assignPublicKey();
 
-        // Upload des fichiers
-        if ($request->hasFile('piece_avant') && $request->file('piece_avant')->isValid()) {
-            $file = $request->file('piece_avant');
-            $filename = md5_file($file->getRealPath() . microtime()) . '.' . $file->extension();
-            $path = $file->storeAs('pieces', $filename);
-            $user->piece_recto = $path;
-        }
-        
-        if ($request->hasFile('piece_arriere') && $request->file('piece_arriere')->isValid()) {
-            $file = $request->file('piece_arriere');
-            $filename = md5_file($file->getRealPath() . microtime()) . '.' . $file->extension();
-            $path = $file->storeAs('pieces', $filename);
-            $user->piece_verso = $path;
-        }
-
         $user->save();
-        $token = $user->createToken('mobile_token')->plainTextToken;
 
+        // Créer le coffre si nécessaire
+        if (!$user->coffre) {
+            $user->coffre()->create([
+                'solde' => 0,
+                'date_expiration' => now()->addYear(),
+            ]);
+        }
+
+        // Création d'un token pour l'utilisateur
+        $token = $user->createToken('mobile_token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
             'token' => $token,
         ]);
     }
-
 
     public function sendCodeByResetPassword(Request $request)
     {
@@ -137,7 +98,32 @@ class AuthController extends Controller
             'code'    => $data['code'],
         ]);
     }
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string|exists:users,telephone',
+            'password' => 'required|string|min:4',
+        ]);
 
+        $user = User::where('telephone', $request->phone)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+        // Ici on stocke le codeSecret (mot de passe) hashé pour sécurité
+        $user->codeSecret = Hash::make($request->password);
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Si tu utilises token JWT ou Sanctum, crée un token et renvoie-le
+        $token = $user->createToken('mobile_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Mot de passe mis à jour avec succès',
+            'token' => $token,
+            'user' => $user,
+        ]);
+    }
 
     public function verifyCode(Request $request)
     {
@@ -202,7 +188,6 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'PIN mis à jour avec succès']);
     }
-
 
     public function setSecret(Request $request)
     {

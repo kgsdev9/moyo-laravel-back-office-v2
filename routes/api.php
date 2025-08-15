@@ -10,6 +10,7 @@ use App\Http\Controllers\CategorySchoolController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Cagnote\CagnoteController;
 use App\Http\Controllers\Coffre\CoffreController;
+use App\Http\Controllers\Commande\CommandeController;
 use App\Http\Controllers\Commune\CommuneController;
 use App\Http\Controllers\EcoleController;
 use App\Http\Controllers\Scolarite\ScolariteController;
@@ -43,7 +44,6 @@ Route::post('/maj/profile', [AuthController::class, 'setSecret']);
 Route::post('/user/update-password', [AuthController::class, 'updatePassword']);
 Route::post('/profile/updateProfilUser', [AuthController::class, 'createOrUpdateProfilUser']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);
     Route::post('/logout', function (Request $request) {
@@ -63,16 +63,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/coffre/transaction', [CoffreController::class, 'creditOrDebit']);
     Route::post('/cagnotes/participer', [CagnoteController::class, 'participer']);
     Route::resource('cagnotes', CagnoteController::class);
+    Route::resource('commandes', CommandeController::class);
     Route::apiResource('articles', ArticleController::class);
     Route::apiResource('villes', VilleController::class);
     Route::apiResource('services', ServiceController::class);
     Route::apiResource('specialites', SpecialiteController::class);
     Route::get('/coffres/{user_id}/solde', [CoffreController::class, 'getSoldeByUserId']);
     Route::post('/coffre/operation', [CoffreController::class, 'creditOrDebit']);
-
-
+    Route::post('/commande/versement', [CommandeController::class, 'versementCommande']);
+    Route::get('/user/commandes/{id}', [CommandeController::class, 'getCommandesByArg']);
 });
- Route::apiResource('communes', CommuneController::class);
+Route::apiResource('communes', CommuneController::class);
 Route::get('/categories', [CategorySchoolController::class, 'index']);
 Route::get('/ecoles', [EcoleController::class, 'index']);
 Route::post('/payer-scolarite', [ScolariteController::class, 'payer']);
