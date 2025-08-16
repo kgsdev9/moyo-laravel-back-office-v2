@@ -26,4 +26,6 @@ class Commande extends Model
         'montantregle',
         'montantrestant'
     ];
+
+    //montantaregleralalivraison
 }

@@ -57,9 +57,8 @@ class AuthController extends Controller
         $user->nomcomplet = $request->input('nomcomplet');
         $user->adresse = $request->input('adresse');
         $user->commune_id = $request->input('commune');
-        $user->codeSecret = $request->input('pin');
+        $user->codeSecret = Hash::make($request->input('pin'));
         $user->assignPublicKey();
-
         $user->save();
 
         // Créer le coffre si nécessaire

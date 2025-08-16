@@ -15,7 +15,6 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('libelle');
             $table->string('quantite');

@@ -10,7 +10,6 @@ class Article extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code',
         'quantite',
         'category_id',
         'libelle',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Commande;
 
 use App\Http\Controllers\Controller;
 use App\Models\Commande;
+use App\Models\CommandeLigne;
 use App\Models\Solde;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -104,7 +105,41 @@ class CommandeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'items' => 'required|array|min:1',
+            'dateLivraison' => 'required|date',
+            'total' => 'required|numeric',
+            'montantParent' => 'required|numeric',
+        ]);
+
+        // Création de la commande
+        $commande = Commande::create([
+            'qtecmde' => array_sum(array_map(fn($i) => $i['quantity'], $request->items)),
+            'montantttc' => $request->total,
+            'montantht' => $request->total,
+            'user_id' => $request->user_id,
+            'commune_id' =>1,
+            'datelivraison' => $request->dateLivraison,
+            'montantregle' => $request->montantParent,
+        ]);
+
+        // Création des lignes de commande
+        foreach ($request->items as $item) {
+            CommandeLigne::create([
+                'commande_id' => $commande->id,
+                'article_id' => $item['id'],
+                'quantite' => $item['quantity'],
+                'pu' => $item['pu'],
+                'montantht' => ($item['pu'] ?? 0) * ($item['quantity'] ?? 1),
+                'montantttc' => ($item['pu'] ?? 0) * ($item['quantity'] ?? 1),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Commande enregistrée avec succès',
+        ]);
     }
 
     /**
